@@ -9,6 +9,13 @@ from transformers import BertTokenizer
 
 from ultralytics import YOLO
 
+# from nltk.corpus import stopwords
+# from nltk.stem import WordNetLemmatizer
+# nltk.download(['stopwords','wordnet'])
+
+# nltk.download('punkt_tab')
+# nltk.download('averaged_perceptron_tagger_eng')
+
 class RiseupappConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'riseupApp'

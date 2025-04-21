@@ -1,0 +1,400 @@
+{% verbatim %}
+<style>
+  /* Custom badge for completed files */
+  .badge-validated {
+    border: 1px solid green;
+    background-color: rgba(0, 128, 0, 0.1); /* Green with opacity */
+    color: green;
+    padding: 5px 10px;
+  }
+
+  /* Custom badge for Un-Tagged files */
+  .badge-untagged {
+    border: 1px solid orange;
+    background-color: rgba(255, 165, 0, 0.1); /* Orange with opacity */
+    color: orange;
+    padding: 5px 10px;
+  }
+
+  .badge-processing {
+    border: 1px solid grey;
+    background-color: rgba(108, 117, 125, 0.2);
+    color: grey;
+    padding: 5px 10px;
+  }
+
+  .badge-uploaded {
+    border: 1px solid dodgerblue;
+    background-color: rgba(30, 144, 255, 0.1); /* Orange with opacity */
+    color: dodgerblue;
+    padding: 5px 10px;
+  }
+
+  .badge-tagged {
+    border: 1px solid dodgerblue;
+    background-color: rgba(30, 144, 255, 0.1); /* Orange with opacity */
+    color: dodgerblue;
+    padding: 5px 10px;
+  }
+
+  .badge-failed {
+    border: 1px solid red;
+    background-color: rgba(220, 53, 69, 0.09); /* Orange with opacity */
+    color: red;
+    padding: 5px 10px;
+  }
+
+  .popover-confirmation {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+
+  /* Style for the nofiles image */
+  .nofiles-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .nofiles-img {
+    width: 200px; /* Increase the size */
+    opacity: 0.4; /* Slight opacity */
+    scale: 1.5;
+  }
+
+  .no-caret::after {
+    display: none;
+  }
+
+  .btn-group .dropdown-toggle::after {
+    display: none; /* Hide the default arrow */
+  }
+
+  .filter-div {
+    z-index: 1000; /* Ensure it appears above other elements */
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 200px;
+    margin-left: 350px;
+    border-radius: 20px;
+  }
+
+  .custom-checkbox {
+    width: 20px; /* Adjust the width */
+    height: 20px; /* Adjust the height */
+    cursor: pointer; /* Change cursor on hover */
+  }
+
+  /* Optional: Increase the space around the checkbox */
+  .custom-checkbox + label {
+    margin-left: 10px; /* Add space between checkbox and label */
+  }
+
+  /* Style for the checkbox when checked */
+  .custom-checkbox:checked {
+    background-color: #007bff; /* Change background color when checked */
+  }
+
+  .fileItem:hover {
+    background-color: #e9ecef;
+    cursor: pointer;
+  }
+
+  .file-checkbox {
+    cursor: pointer;
+    width: 1.5%;
+    height: 100%;
+  }
+
+  .dropdown-item.active,
+  .dropdown-item:active {
+    background-color: lightgray !important;
+  }
+
+  .btn-grad {
+    background-image: linear-gradient(
+      to right,
+      #00c6ff 0%,
+      #0072ff 51%,
+      #00c6ff 100%
+    );
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+  }
+
+  .btn-grad:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .selectedFile {
+    border-color: #1073af !important;
+    background-color: rgba(16, 115, 175, 0.1);
+  }
+</style>
+<div
+  class="card-body w-100 d-flex flex-column overflow-auto gap-3">
+  <div class="w-100 d-flex mb-1 align-items-center justify-content-between">
+    <h2 class="card-title m-0"><span class="browse">PROJECT</span> FILES</h2>
+    <h4 ng-if="getSelectedFiles().length > 0">{{getSelectedFiles().length}} /
+      {{files.length}} selected</h4>
+  </div>
+
+  <div class="mb-3 d-flex gap-2 w-100">
+    <input
+      type="text"
+      ng-model="searchText"
+      class="form-control w-25"
+      placeholder="Search File..." />
+
+    <button
+      class="btn rounded-4 btn-primary w-auto"
+      ng-click="handleSearch()"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      title="Refresh Files">
+      <i class="fa-solid fa-rotate-right"></i>
+    </button>
+
+    <button
+        class="btn rounded-4 btn-secondary w-auto"
+        ng-click="goToUploads()"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title="Upload File">
+        <i class="fa-solid fa-upload"></i>
+    </button>
+
+    <div class="d-flex gap-2 ms-auto" ng-if="getSelectedFiles().length > 0">
+      <button
+        class="btn rounded-4 btn-danger w-auto d-flex align-items-center justify-content-center gap-2"
+        data-bs-toggle="modal"
+        data-bs-target="#deleteModal">
+        <i class="fa-solid fa-trash"></i>
+        <span> Delete</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Search input -->
+  <div class="nofiles-container" ng-if="files.length == 0">
+    <img src="/static/images/nofiles.png" class="nofiles-img" />
+  </div>
+
+  <div
+    ng-if="files.length != 0"
+    class="border px-2 py-1 rounded-3 d-flex m-0 gap-3 me-2 align-items-center">
+    <input
+      type="checkbox"
+      class="file-checkbox"
+      ng-model="allFiles.selected"
+      ng-change="toggleSelectAll()"
+      ng-disabled="hasProcessingFiles()" />
+
+    <div class="d-flex col-4 align-items-center px-5">
+      <span style="font-weight: 600; color: #1073af">File Name</span>
+    </div>
+
+    <div class="d-flex col-3">
+      <span style="font-weight: 600">Added on</span>
+    </div>
+
+    <div class="d-flex justify-content-center col-2">
+      <span style="font-weight: 600; color: #1073af">Status</span>
+    </div>
+  </div>
+
+  <div
+    class="d-flex flex-column w-100 h-100 overflow-auto gap-3 mt-1"
+    ng-if="files.length != 0">
+    <div
+      class="fileItem border px-2 rounded-3 d-flex m-0 gap-3 align-items-center justify-content-center me-2"
+      style="height: 14%"
+      ng-class="{ 'selectedFile': file.selected }"
+      ng-click="toggleFileSelection(file)"
+      ng-disabled="file.fileStatus == 'Processing'"
+      ng-repeat="file in filteredFiles || files | filter:startsWithFilter">
+      <!-- Checkbox for selecting files -->
+      <input
+        type="checkbox"
+        class="file-checkbox"
+        ng-model="file.selected"
+        ng-disabled="file.fileStatus == 'Processing'" />
+
+      <div class="h-100 col-4 d-flex gap-2 align-items-center">
+        <img ng-src="{{ getIconSrc(file.filename) }}" class="h-100" />
+        <strong>{{file.filename}}</strong>
+      </div>
+
+      <div class="d-flex justify-content-start align-items-center col-3">
+        <span style="font-weight: 500; color: #1073af">{{file.addedOn |
+          date:'dd-MM-yyyy'}}</span>
+      </div>
+
+      <div
+        class="d-flex justify-content-start align-items-center justify-content-center col-2">
+        <button
+          class="btn"
+          ng-click="retryUpload(file.id, $event)"
+          ng-if="file.fileStatus == 'Failed'">
+          <i class="text-primary fa-solid fa-rotate-right"></i>
+        </button>
+
+        <div
+          ng-show="file.fileStatus == 'Processing'"
+          class="spinner-border spinner-border-sm text-primary me-2"
+          role="status"></div>
+        <span
+          class="badge rounded-pill"
+          ng-class="{ 'badge-validated' : file.fileStatus == 'Validated',  'badge-untagged' :  file.fileStatus == 'Un-Tagged', 'badge-uploaded' :  file.fileStatus == 'Uploaded', 'badge-processing' :  file.fileStatus == 'Processing',  'badge-failed' :  file.fileStatus == 'Failed'}">
+          {{ file.fileStatus }}
+        </span>
+      </div>
+
+      <div
+        class="d-flex gap-3 h-100 ms-auto align-items-center me-2 col-2 justify-content-end">
+        
+        <!-- Delete button with modal -->
+        <button
+          class="btn"
+          ng-click="setFileOfAction(file)"
+          data-bs-toggle="modal"
+          data-bs-target="#deleteFile"
+          title="Delete File"
+          ng-disabled="file.fileStatus == 'Processing'">
+          <i class="text-danger fa-solid fa-trash"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  id="errToast"
+  style="z-index: 999"
+  class="mb-4 border-danger custom-toast toast position-absolute top-0 start-50 translate-middle-x"
+  role="alert"
+  aria-live="assertive"
+  aria-atomic="true">
+  <div class="toast-header d-flex gap-2">
+    <i class="text-danger fa-solid fa-circle-exclamation fa-beat"></i>
+    <strong class="me-auto">{{errTitle}}</strong>
+    <button
+      type="button"
+      class="ms-auto btn-close"
+      data-bs-dismiss="toast"
+      aria-label="Close"></button>
+  </div>
+  <div class="toast-body bg-light rounded-2 border border-top-0">
+    {{errMessage}}
+  </div>
+</div>
+
+<div
+  id="successToast"
+  style="z-index: 999"
+  class="mb-4 border-success custom-successtoast toast position-absolute top-0 start-50 translate-middle-x"
+  role="alert"
+  aria-live="assertive"
+  aria-atomic="true">
+  <div class="toast-header d-flex gap-2">
+    <i class="text-success fa-solid fa-circle-check fa-beat"></i>
+    <strong class="me-auto">{{errTitle}}</strong>
+    <button
+      type="button"
+      class="ms-auto btn-close"
+      data-bs-dismiss="toast"
+      aria-label="Close"></button>
+  </div>
+  <div class="toast-body bg-light rounded-2 border border-top-0">
+    {{errMessage}}
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="deleteFile"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete <b>{{actionForFile.filename}}</b> ?
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-danger"
+          ng-click="confirmDelete(actionForFile.id)"
+          data-bs-dismiss="modal">
+          <i class="fas fa-trash col-2"></i> Confirm
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal">
+          <i class="fa-regular fa-circle-xmark"></i> Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="deleteModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to Delete selected Files?
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-danger"
+          ng-click="deleteSelectedFiles()"
+          data-bs-dismiss="modal">
+          <i class="fas fa-trash col-2"></i> Confirm
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="fa-regular fa-circle-xmark"></i> Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endverbatim %}

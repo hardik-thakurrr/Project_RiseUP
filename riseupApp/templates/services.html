@@ -1,0 +1,215 @@
+{% verbatim %}
+<!-- Custom CSS -->
+<style>
+
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    position: relative;
+    margin-bottom: 1.5rem;
+    color: var(--primary-dark);
+}
+
+  .section-subtitle {
+      font-size: 1.1rem;
+      margin-bottom: 3rem;
+  }
+
+  section {
+      padding: 100px 0;
+      position: relative;
+  }
+
+  .services-section {
+    background-color: var(--light-bg);
+    position: relative;
+}
+
+.services-card {
+    background-color: var(--white);
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    height: 100%;
+    border: 1px solid var(--border-color);
+}
+
+.services-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.services-card h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--primary-dark);
+}
+
+.services-card p {
+    font-size: 0.95rem;
+    margin-bottom: 0;
+    color: var(--text-light);
+}
+
+.card-img-bottom {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: top;
+}
+
+.card-selected-bg {
+    background: color-mix(in srgb, #86b7fe 50%, transparent) !important;
+}
+
+.resume-card {
+  overflow: clip;
+  border-radius: 0.75rem;
+  border: 0;
+  background-color: #e9ecef;
+}
+
+.resume-card:hover, .resume-card:focus {
+  background-color: lightgrey;
+}
+
+</style>
+<div class="card-body w-100 h-100 d-flex flex-column gap-2">
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="card-title mb-1">OUR<span class="browse"> SERVICES</span></h2>
+  </div>
+  <!-- Services Section -->
+  <div id="services" class="services-section h-100 py-3">
+    <div class="container">
+        <div class="row justify-content-center">
+            
+            <div class="col-md-6 col-lg-3 mb-4" data-bs-toggle="modal" data-bs-target="#chooseResumeModal" ng-click="serviceChosen='resumeInsights'">
+                <div class="services-card h-100">
+                    <h4>Smart Resume Insights</h4>
+                    <p>Receive detailed analysis of your resume alongside a comprehensive summary for better underatanding.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-4" data-bs-toggle="modal" data-bs-target="#chooseResumeModal" ng-click="serviceChosen='jobRoles'">
+                <div class="services-card h-100">
+                    <h4>Niche Role Identification</h4>
+                    <p>Get matched to the right job roles based on your skills and past experience.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3 mb-4" ui-sref="personality">
+                <div class="services-card h-100">
+                    <h4>Personality Insights</h4>
+                    <p>Discover how your resume reflects your personality traits and soft skills.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3 mb-4" data-bs-toggle="modal" data-bs-target="#chooseResumeModal" ng-click="serviceChosen='interviewBot'">
+                <div class="services-card h-100">
+                    <h4>Interactive Interview Bot</h4>
+                    <p>Practice with an AI-powered bot that asks tailored, domain-specific questions.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3 mb-4" data-bs-toggle="modal" data-bs-target="#chooseResumeModal" ng-click="serviceChosen='jobReco'">
+                <div class="services-card h-100">
+                    <h4>Personalized Job Recommendations</h4>
+                    <p>Discover job roles that match your skills, interests, and predicted domain.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3 mb-4" ui-sref="courseReco">
+                <div class="services-card h-100">
+                    <h4>Tailored Course Suggestions</h4>
+                    <p>Get course recommendations that can boost your career prospects and fill skill gaps.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-4" data-bs-toggle="modal" data-bs-target="#chooseResumeModal" ng-click="serviceChosen='coverLetter'">
+                <div class="services-card h-100">
+                    <h4>Cover Letter Generation</h4>
+                    <p>Boost your chances of landing your dream job with tailored cover letters based on your resume and the job description.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="chooseResumeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Choose Resume</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body h-auto">
+
+        <div class="row row-cols-3 g-4">
+          <div class="col" ng-repeat="resume in resumes" style="cursor: pointer;" ng-click="select(resume)">
+            <div class="card h-100 resume-card p-2" ng-class="{'card-selected-bg': selectedResume && selectedResume.id === resume.id}">
+              <div class="card-header border-0 bg-transparent d-flex gap-2 align-items-center py-1 px-0">
+                <img ng-src="{{ getIconSrc(resume.filename) }}" style="width: 32px;" />
+                <b>{{resume.filename}}</b>
+              </div>
+              <img class="card-img-bottom rounded-3" ng-src="{{getThumbnail(resume)}}" alt="Card image cap">
+            </div>
+        </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" ng-disabled="!selectedResume" ui-state="serviceChosen" ui-state-params="{'resumeId': selectedResume.id}" data-bs-dismiss="modal"><i class="fas fa-circle-check col-2 me-2"></i> Confirm</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-regular fa-circle-xmark me-2"></i> Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="errToast" style="z-index: 999;"
+  class="mb-4 border-danger custom-toast toast position-absolute top-0 start-50 translate-middle-x" role="alert"
+  aria-live="assertive" aria-atomic="true">
+  <div class="toast-header d-flex gap-2">
+    <i class="text-danger fa-solid fa-circle-exclamation fa-beat"></i>
+    <strong class="me-auto">{{errTitle}}</strong>
+    <button type="button" class="ms-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body bg-light rounded-2 border border-top-0">
+    {{errMessage}}
+  </div>
+</div>
+
+<div id="successToast" style="z-index: 999;"
+  class="mb-4 border-success custom-successtoast toast position-absolute top-0 start-50 translate-middle-x" role="alert"
+  aria-live="assertive" aria-atomic="true">
+  <div class="toast-header d-flex gap-2">
+    <i class="text-success fa-solid fa-circle-check fa-beat"></i>
+    <strong class="me-auto">{{errTitle}}</strong>
+    <button type="button" class="ms-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body bg-light rounded-2 border border-top-0">
+    {{errMessage}}
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">Are you sure you want to delete this Project?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" ng-click="confirmDelete($event)" data-bs-dismiss="modal"><i class="fas fa-trash col-2"></i> Confirm</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-regular fa-circle-xmark"></i> Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endverbatim %}

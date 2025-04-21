@@ -1,0 +1,139 @@
+{% verbatim %}
+<!-- Custom CSS -->
+<style>
+  :root {
+    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --blur: blur(10px);
+    --border-radius: 20px;
+    --badge-bg: var(--primary);
+    --text-dark: #1f1f1f;
+  }
+  
+  .niche-jobroles-container {
+    height: 400px;
+    position: relative;
+  }
+  
+  .job-circle {
+    width: 320px;
+    height: 320px;
+    position: relative;
+  }
+  
+  .job-domain {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    backdrop-filter: var(--blur);
+    background-color: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 20px var(--shadow-color);
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: uppercase;
+    color: var(--primary-dark);
+  }
+  
+  .job-role {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    text-align: center;
+    border-radius: var(--border-radius);
+    backdrop-filter: var(--blur);
+    background-color: rgba(80, 211, 205, 0.15);
+    box-shadow: 0 8px 16px var(--shadow-color);
+    width: 150px;
+  }
+  
+  .role-top {
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .role-top-right {
+    top: 20%;
+    right: -30px;
+    transform: translateY(-50%);
+  }
+  .role-bottom-right {
+    bottom: -20px;
+    right: 20%;
+    transform: translateX(50%);
+  }
+  .role-bottom-left {
+    bottom: -20px;
+    left: 20%;
+    transform: translateX(-50%);
+  }
+  .role-top-left {
+    top: 20%;
+    left: -30px;
+    transform: translateY(-50%);
+  }
+  
+</style>
+<div class="card-body w-100 h-100 d-flex flex-column gap-2">
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="card-title mb-1">NICHE <span class="browse">JOB ROLES</span></h2>
+  </div>
+  <div class="niche-jobroles-container d-flex justify-content-center align-items-center mt-4">
+    <div class="job-circle position-relative">
+  
+      <!-- Center Domain -->
+      <div class="job-domain riseup-card px-4 py-3">
+        <h4 class="mb-0 text-center">{{ jobRoles.domain }}</h4>
+      </div>
+  
+      <!-- Surrounding Roles -->
+      <div class="job-role riseup-card position-absolute role-top">
+        {{ jobRoles.roles[0] }}
+      </div>
+      <div class="job-role riseup-card position-absolute role-top-right">
+        {{ jobRoles.roles[1] }}
+      </div>
+      <div class="job-role riseup-card position-absolute role-bottom-right">
+        {{ jobRoles.roles[2] }}
+      </div>
+      <div class="job-role riseup-card position-absolute role-bottom-left">
+        {{ jobRoles.roles[3] }}
+      </div>
+      <div class="job-role riseup-card position-absolute role-top-left">
+        {{ jobRoles.roles[4] }}
+      </div>
+  
+    </div>
+  </div>
+  
+</div>
+
+<div id="errToast" style="z-index: 999;"
+  class="mb-4 border-danger custom-toast toast position-absolute top-0 start-50 translate-middle-x" role="alert"
+  aria-live="assertive" aria-atomic="true">
+  <div class="toast-header d-flex gap-2">
+    <i class="text-danger fa-solid fa-circle-exclamation fa-beat"></i>
+    <strong class="me-auto">{{errTitle}}</strong>
+    <button type="button" class="ms-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body bg-light rounded-2 border border-top-0">
+    {{errMessage}}
+  </div>
+</div>
+
+<div id="successToast" style="z-index: 999;"
+  class="mb-4 border-success custom-successtoast toast position-absolute top-0 start-50 translate-middle-x" role="alert"
+  aria-live="assertive" aria-atomic="true">
+  <div class="toast-header d-flex gap-2">
+    <i class="text-success fa-solid fa-circle-check fa-beat"></i>
+    <strong class="me-auto">{{errTitle}}</strong>
+    <button type="button" class="ms-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body bg-light rounded-2 border border-top-0">
+    {{errMessage}}
+  </div>
+</div>
+
+{% endverbatim %}

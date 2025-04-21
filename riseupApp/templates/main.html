@@ -1,0 +1,215 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" ng-app="fileUploadApp">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="{% static 'images/logo.ico' %}" />
+  <!--<link rel="icon" type="image/x-icon" href="{% static 'images/logo.png' %}"/>-->
+  <title>RiseUP</title>
+  <base href="/" />
+
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+
+  <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spinkit/1.2.5/spinkit.min.css">
+
+</head>
+
+<body ng-controller="IndexController" ng-init="initialize()">
+  {% verbatim %}
+
+  <ng-loader settings="{spinkit: 'sk-circle', class:'blue', containerClass: 'loaderContainer'}"></ng-loader>
+
+  <div style="overflow: auto; width: 100%; height: 100%;">
+    <!-- Navbar -->
+    <nav class="navbar bg-white border-bottom px-3" style="height: 10%;" ng-if="userName != ''">
+      <div style="cursor: pointer;" class="d-flex justify-content-center align-items-center h-100 me-auto" ng-click="goToLandingPage()">
+        <img src="/static/images/RiseUP.png" class="overflow-auto h-100" style="object-fit: contain;" />
+      </div>
+
+      <div class="btn-group">
+        <button type="button" class="btn btn-outline-secondary rounded-pill">
+          <i class="fa-solid fa-user"></i> <b>{{ userName }}</b>
+        </button>
+      </div>
+    </nav>
+
+    <div style="background-color: aliceblue; height: 90%;">
+      <div class="d-flex justify-content-center align-items-center container-fluid h-100 p-2">
+        <div class="d-flex w-100 h-100 p-2 gap-2">
+          <ul class="nav nav-pills flex-column bg-white p-3 list-group list-group-flush"
+            style="border-radius: 10px; box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;">
+            <li class="nav-item list-group-item">
+              <a class="nav-link d-flex gap-3 align-items-center" ui-sref="upload"
+                ui-sref-active="active"><i class="fa-solid fa-upload" style="width: 10%;"></i>Upload</a>
+            </li>
+            <li class="nav-item list-group-item">
+              <a class="nav-link d-flex gap-3 align-items-center" ui-sref="resumes"
+                ui-sref-active="active"><i class="fa-solid fa-file" style="width: 10%;"></i>Resumes</a>
+            </li>
+            <li class="nav-item list-group-item">
+              <a class="nav-link d-flex gap-3 align-items-center" ui-sref="services"
+                ui-sref-active="active"><i class="fa-solid fa-atom" style="width: 10%;"></i>Services</a>
+            </li>
+
+            <li class="nav-item list-group-item mt-auto">
+              <a class="nav-link d-flex gap-3 align-items-center" style="color: white; background-color: var(--primary);"
+                ui-sref="projects"><i class="fa-solid fa-user" style="width: 10%;"></i>Profile</a>
+            </li>
+
+            <li class="nav-item list-group-item">
+              <a class="nav-link d-flex gap-3 align-items-center" href="#" ng-click="logout()"><i
+                class="text-danger fa-solid fa-power-off" style="width: 10%;"></i> Logout</a>
+            </li>
+          </ul>
+          <div ui-view class="card p-4 flex-grow-1 border-0 d-flex justify-content-center align-items-center" style="
+                  border-radius: 10px;
+                  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;"></div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="msgModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <i class="fs-4 text-danger fa-solid fa-circle-exclamation fa-beat"></i>
+                <h5 class="ms-2 modal-title" id="exampleModalLabel">{{errTitle}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">{{errMessage}}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="trainModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <i class="fs-4 text-success fa-solid fa-circle-check me-2"></i>
+                <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">Do you want to <b>Train</b> all the Files in the
+                Project?</div>
+              <div class="modal-footer">
+                <button type="button" style="width:25%;" class="btn btn-success" data-bs-dismiss="modal"
+                  data-bs-toggle="modal" data-bs-target="#modelDetailsModal"><i class="fa-solid fa-atom fa-beat"></i>
+                  Train All</button>
+                <button type="button" style="width:29%;" ui-sref="projectDetail.files" class="btn btn-secondary"
+                  data-bs-dismiss="modal"><i class="fa-solid fa-file-circle-check"></i>
+                  Choose Files</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="errToast" style="z-index: 999;"
+          class="mb-4 border-danger custom-toast toast position-absolute top-0 start-50 translate-middle-x" role="alert"
+          aria-live="assertive" aria-atomic="true">
+          <div class="toast-header d-flex gap-2">
+            <i class="text-danger fa-solid fa-circle-exclamation fa-beat"></i>
+            <strong class="me-auto">{{errTitle}}</strong>
+            <button type="button" class="ms-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body bg-light rounded-2 border border-top-0">
+            {{errMessage}}
+          </div>
+        </div>
+
+        <div id="successToast" style="z-index: 999;"
+          class="mb-4 border-success custom-successtoast toast position-absolute top-0 start-50 translate-middle-x"
+          role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header d-flex gap-2">
+            <i class="text-success fa-solid fa-circle-check fa-beat"></i>
+            <strong class="me-auto">{{errTitle}}</strong>
+            <button type="button" class="ms-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body bg-light rounded-2 border border-top-0">
+            {{errMessage}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  {% endverbatim %}
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="http://unpkg.com/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
+  <script src="{% static 'js/spinkit-loader.min.js' %} "></script>
+  
+  <script src="{% static 'js/app.js' %}"></script>
+  <script src="{% static 'js/service.js' %}"></script>
+
+  <script src="{% static 'js/uploadCtr.js' %}"></script>
+  <script src="{% static 'js/resumeCtr.js' %}"></script>
+  <script src="{% static 'js/servicesCtr.js' %}"></script>
+
+  <script src="{% static 'js/resumeInsightsCtr.js' %}"></script>
+  <script src="{% static 'js/jobRolesCtr.js' %}"></script>
+  <script src="{% static 'js/personalityCtr.js' %}"></script>
+  <script src="{% static 'js/interviewBotCtr.js' %}"></script>
+  <script src="{% static 'js/jobRecoCtr.js' %}"></script>
+  <script src="{% static 'js/courseRecoCtr.js' %}"></script>
+  <script src="{% static 'js/coverLetterCtr.js' %}"></script>
+
+  <script>
+    app.controller('IndexController', ['$scope', '$state', '$http', '$q', 'appService', function ($scope, $state, $http, $q, appService) {
+
+      $scope.userName = "";
+      $scope.userKey = "";
+
+      $scope.initialize = function () {
+        appService.fetchUsername().then(function (data) {
+
+          $scope.userName = data.email;
+          $scope.userKey = data.userKey;
+
+        }).catch(function (error) {
+          window.location.href = "/login";
+        });
+
+      };
+
+      // Logout function
+      $scope.logout = function () {
+        appService.logout().then(function (response) {
+          window.location.href = "/login";
+        }).catch(function (error) {
+          console.error("Error during logout:", error);
+        });
+      };
+
+      $scope.openToast = function (toastType, error) {
+
+        var myToastEl = document.getElementById(toastType)
+        var myToast = new bootstrap.Toast(myToastEl, {
+          delay: 5000
+        });
+        $scope.errTitle = error.title;
+        $scope.errMessage = error.message;
+        $scope.$apply();
+        myToast.show();
+
+      };
+
+      $scope.goToLandingPage = function () {
+        window.location.href = "/";
+      };
+
+    }]);
+
+
+  </script>
+
+</body>
+
+</html>

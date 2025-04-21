@@ -1,0 +1,49 @@
+{% verbatim %}
+  <div class="card-body w-100 d-flex flex-column overflow-auto gap-3">
+    <h2 class="card-title mb-1"><span class="browse">UPLOAD</span> FILES</h2>
+    <form name="uploadForm" ng-submit="uploadFile()" novalidate class="flex-fill card-text d-flex overflow-auto gap-4">
+      <div id="fileLabel" style="width: 0%" ng-drag-over ng-if="files.length == 0" class="flex-fill d-flex flex-column align-items-center justify-content-center p-2 file-upload-box">
+        <img src="/static/images/BgFiles.png" class="overflow-auto" style="object-fit: contain; opacity: 0.5" />
+        <span class="content">Drop your files here.</span>
+        <p>
+          or
+          <label class="browse" for="fileInput" style="cursor: pointer">Browse</label>
+        </p>
+        <input type="file" name="file" id="fileInput" ng-file-change="handleFiles" multiple hidden accept=".pdf, .jpeg, .jpg, .png" />
+      </div>
+
+      <div id="object-container" class="flex-fill" ng-show="files.length > 0" style="width: 50%">
+        <div id="viewer-window">
+          <img ng-if="files[activeIndex].name.split('.').pop().toLowerCase() != 'pdf'" id="output" width="100%" height="100%" ng-src="{{fileUrls[activeIndex]}}"></img>
+          <object ng-if="files[activeIndex].name.split('.').pop().toLowerCase() == 'pdf'" id="output" data="{{fileUrls[activeIndex]}}" type="application/pdf"></object>
+        </div>
+        <div id="image-controls" ng-if="isImageVisible">
+          <button type="button" class="btn-sm btn-secondary zoom-btn" ng-click="zoomIn()">+</button>
+          <button type="button" class="btn-sm btn-secondary zoom-btn" ng-click="zoomOut()">-</button>
+        </div>
+      </div>
+
+      <div id="fileContainer" ng-if="files.length > 0 && !progressVisible" class="h-100 d-flex flex-column flex-fill justify-content-center" style="width: 50%">
+        <div class="file-list h-auto overflow-auto" id="fileList">
+          <div ng-repeat="file in files" style="cursor: pointer;" class="file-item" ng-class="{ 'currentFile': $index == activeIndex }" ng-click="changeSelection($event, $index)">
+            <div class="file-info">
+              <img ng-src="{{ getIconSrc(file.type) }}" class="preview-icon" />
+              <span>
+                {{ file.name }} ({{ (file.size / 1024).toFixed(2) }}
+                KB)
+              </span>
+            </div>
+            <div class="file-status">
+              <span class="status">Uploaded</span>
+              <svg style="cursor: pointer" ng-click="removeFile($index)" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary mx-auto mt-3 rounded-pill border-0" type="submit" style="width: 30%; font-size: large; background-color: #1073af">UPLOAD</button>
+      </div>
+
+    </form>
+  </div>
+{% endverbatim %}

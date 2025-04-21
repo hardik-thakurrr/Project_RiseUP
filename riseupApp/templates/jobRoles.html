@@ -1,0 +1,133 @@
+{% verbatim %}
+<!-- Custom CSS -->
+<style>
+  .riseup-card {
+    backdrop-filter: var(--blur);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px; /* Rounded corners */
+    box-shadow: 0 8px 20px var(--shadow-color);
+    transition: all 0.3s ease-in-out;
+    height: 100%; /* Ensures equal height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .riseup-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .section-heading {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--primary-dark);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .main-container {
+    display: flex;
+    justify-content: center; /* Centers content horizontally */
+    align-items: center; /* Centers content vertically */
+    height: 100vh; /* Full viewport height */
+  }
+
+  .card-columns {
+    display: flex;
+    justify-content: space-between;
+    width: 80%; /* Control width */
+    gap: 30px;
+  }
+
+  /* Adding the vertical separator line */
+  .separator {
+    width: 1px;
+    background-color: var(--glass-border);
+    margin: 0 20px;
+    height: 100%;
+  }
+
+  /* Ensures all cards have the same width and height */
+  .col-md-4, .col-md-8 {
+    display: flex;
+    justify-content: center;
+  }
+
+  .col-md-4 .riseup-card,
+  .col-md-8 .riseup-card {
+    width: 100%; /* Make cards full-width in their columns */
+  }
+</style>
+
+<div class="card-body w-100 h-100 d-flex flex-column gap-2">
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="card-title mb-1">NICHE <span class="browse">JOB ROLES</span></h2>
+  </div>
+
+  <div class="main-container">
+    <div class="card-columns">
+      <!-- Domain Column -->
+      <div class="col-md-4 d-flex">
+        <div class="card riseup-card w-100 d-flex justify-content-center align-items-center"
+          style="background-color: rgba(16, 144, 236, 0.15); min-height: 100%;">
+          <div class="card-body">
+            <h5 class="section-heading">{{ jobRoles.domain }}</h5>
+          </div>
+
+          <img src="/static/images/Domain.jpg" alt="Personality Visual" style="width: 100%; " />
+        </div>
+      </div>
+  
+      <!-- Vertical Line Separator -->
+      <div class="separator"></div>
+  
+      <!-- Roles Column -->
+      <div class="col-md-8">
+        <div class="row row-cols-2 row-cols-md-3 g-3">
+          <div class="col" ng-repeat="jobRole in jobRoles.roles">
+            <div class="card riseup-card h-100 align-items-center justify-content-center"
+              style="background-color: rgba(22, 225, 11, 0.15);">
+              <div class="card-body flex-grow-0">
+                <h5 class="section-heading">{{ jobRole }}</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+</div>
+
+<!-- Toast Notifications -->
+<div id="errToast" style="z-index: 999;"
+  class="mb-4 border-danger custom-toast toast position-absolute top-0 start-50 translate-middle-x" role="alert"
+  aria-live="assertive" aria-atomic="true">
+  <div class="toast-header d-flex gap-2">
+    <i class="text-danger fa-solid fa-circle-exclamation fa-beat"></i>
+    <strong class="me-auto">{{errTitle}}</strong>
+    <button type="button" class="ms-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body bg-light rounded-2 border border-top-0">
+    {{errMessage}}
+  </div>
+</div>
+
+<div id="successToast" style="z-index: 999;"
+  class="mb-4 border-success custom-successtoast toast position-absolute top-0 start-50 translate-middle-x" role="alert"
+  aria-live="assertive" aria-atomic="true">
+  <div class="toast-header d-flex gap-2">
+    <i class="text-success fa-solid fa-circle-check fa-beat"></i>
+    <strong class="me-auto">{{errTitle}}</strong>
+    <button type="button" class="ms-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body bg-light rounded-2 border border-top-0">
+    {{errMessage}}
+  </div>
+</div>
+{% endverbatim %}

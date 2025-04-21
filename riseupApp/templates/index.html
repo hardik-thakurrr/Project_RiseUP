@@ -1,0 +1,418 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" ng-app="riseUpApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RiseUP - Your AI-Powered Career Companion</title>
+    
+    <base href="/" />
+
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body ng-controller="MainController as vm">
+
+    {% verbatim %}
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg" ng-class="{'navbar-fixed': vm.isScrolled}">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="/static/images/RiseUP.png" alt="RiseUP Logo" height="40">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="" ng-click="vm.scrollTo('hero')">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="" ng-click="vm.scrollTo('why-riseup')">Why RiseUP</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="" ng-click="vm.scrollTo('services')">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="" ng-click="vm.scrollTo('contact')">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/main" class="btn btn-primary-gradient ms-lg-3" style="color: white !important;">Get Started</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 hero-content" data-aos="fade-right">
+                    <h1 class="hero-title">Your <span class="ai-gradient">AI</span>-Powered<br><span class="title-gradient">Career Companion</span></h1>
+                    <p class="hero-subtitle">RiseUP uses artificial intelligence to help you create impressive resumes, prepare for interviews, and discover personalized career paths that match your skills and aspirations.</p>
+                    <div class="hero-cta d-flex flex-wrap gap-3">
+                        <a href="#why-riseup" class="btn btn-dark btn-lg" style="color: white !important;">Learn More</a>
+                        <a href="#contact" class="btn btn-outline-secondary btn-lg">Contact Us</a>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left" data-aos-delay="200">
+                    <div class="hero-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" alt="Career Growth with AI" class="img-fluid">
+                        <div class="floating-card floating-card-1">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Smart Resume Analyzer</span>
+                        </div>
+                        <div class="floating-card floating-card-2">
+                            <i class="fas fa-comments"></i>
+                            <span>Interview AI Coach</span>
+                        </div>
+                        <div class="floating-card floating-card-3">
+                            <i class="fas fa-briefcase"></i>
+                            <span>Personalized Recommendations</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-wave">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100">
+                <path fill="#ffffff" fill-opacity="1" d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Why RiseUP Section -->
+    <section id="why-riseup" class="why-riseup-section">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-8 offset-lg-2 text-center">
+                    <h2 class="section-title" data-aos="fade-up">Why RiseUP?</h2>
+                    <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
+                        We understand how overwhelming the job-seeking process can be. Switching between multiple tools wastes precious time—that's why we created RiseUP: a unified, AI-powered platform.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-3 mb-4" data-aos="fade-up">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper bg-light-blue">
+                            <i class="fas fa-file-alt text-primary"></i>
+                        </div>
+                        <h4 class="feature-title">Improve Your Resume</h4>
+                        <p class="feature-text">Get detailed insights and suggestions to make your resume stand out.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper bg-light-green">
+                            <i class="fas fa-comments text-success"></i>
+                        </div>
+                        <h4 class="feature-title">Prepare for Interviews</h4>
+                        <p class="feature-text">Practice with an interactive interview bot that asks personalized questions and gives feedback.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper bg-light-yellow">
+                            <i class="fas fa-envelope text-warning"></i>
+                        </div>
+                        <h4 class="feature-title">Generate Cover Letters</h4>
+                        <p class="feature-text">No more staring at a blank screen—just enter your resume and job role for instant letters.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper bg-light-purple">
+                            <i class="fas fa-road text-info"></i>
+                        </div>
+                        <h4 class="feature-title">Discover Career Paths</h4>
+                        <p class="feature-text">Receive tailored job and course recommendations based on your skills and interests.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-5" id="built-for-everyone">
+                <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
+                    <img src="/static/images/forEvery1.svg" alt="Professional career growth" class="img-fluid rounded">
+                </div>
+                <div class="col-lg-6 pl-3" data-aos="fade-left">
+                    <h3 class="section-title mb-4">Built for Everyone</h3>
+                    <p class="section-subtitle mb-4">
+                        Whether you're a fresh graduate, a professional switching careers, or someone returning to the workforce, RiseUP adapts to your needs and provides guidance that feels personal and actionable.
+                    </p>
+                    <div class="audience-items">
+                        <div class="audience-item d-flex align-items-center mb-3">
+                            <div class="audience-icon bg-primary">
+                                <i class="fas fa-user-graduate text-white"></i>
+                            </div>
+                            <div class="audience-content">
+                                <h5>Fresh Graduates</h5>
+                                <p>Get the guidance you need to stand out in a competitive job market and find opportunities that match your education.</p>
+                            </div>
+                        </div>
+                        <div class="audience-item d-flex align-items-center mb-3">
+                            <div class="audience-icon bg-success">
+                                <i class="fas fa-exchange-alt text-white"></i>
+                            </div>
+                            <div class="audience-content">
+                                <h5>Career Switchers</h5>
+                                <p>Discover how your existing skills transfer to new roles and get recommendations for upskilling opportunities.</p>
+                            </div>
+                        </div>
+                        <div class="audience-item d-flex align-items-center">
+                            <div class="audience-icon bg-warning">
+                                <i class="fas fa-undo text-white"></i>
+                            </div>
+                            <div class="audience-content">
+                                <h5>Returning Professionals</h5>
+                                <p>Rebuild your confidence and refresh your career prospects with personalized guidance and support.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#contact" class="btn btn-primary-gradient mt-4" style="color: white !important;">
+                        Start Your Career Journey
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services-section">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-8 offset-lg-2 text-center">
+                    <h2 class="section-title" data-aos="fade-up">Our Services</h2>
+                    <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
+                        At RiseUP, we bring the power of AI to help you shine in your career journey. Our smart features work together to give you personalized, practical, and confidence-boosting support.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center">
+                
+                <div class="col-md-6 col-lg-3 mb-4" data-aos="fade-up">
+                    <div class="services-card h-100">
+                        <h4>Smart Resume Insights</h4>
+                        <p>Receive detailed analysis of your resume alongside a comprehensive summary for better underatanding.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="services-card h-100">
+                        <h4>Niche Role Identification</h4>
+                        <p>Get matched to the right job roles based on your skills and past experience.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="services-card h-100">
+                        <h4>Personality Insights</h4>
+                        <p>Discover how your resume reflects your personality traits and soft skills.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="services-card h-100">
+                        <h4>Interactive Interview Bot</h4>
+                        <p>Practice with an AI-powered bot that asks tailored, domain-specific questions.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="services-card h-100">
+                        <h4>Personalized Job Recommendations</h4>
+                        <p>Discover job roles that match your skills, interests, and predicted domain.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="services-card h-100">
+                        <h4>Tailored Course Suggestions</h4>
+                        <p>Get course recommendations that can boost your career prospects and fill skill gaps.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="services-card h-100">
+                        <h4>Cover Letter Generation</h4>
+                        <p>Boost your chances of landing your dream job with tailored cover letters based on your resume and the job description.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col-lg-12 text-center">
+                    <div class="cta-box" data-aos="fade-up">
+                        <h3>Ready to transform your career journey?</h3>
+                        <p>Join thousands of job seekers who have already found success with RiseUP</p>
+                        <a href="#contact" class="btn btn-light btn-lg mt-3">Get Started Today</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-6 offset-lg-3 text-center">
+                    <h2 class="section-title" data-aos="fade-up">Get in Touch</h2>
+                    <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
+                        Have questions or want to learn more about how RiseUP can help you? Reach out to our team!
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2">
+                    <div class="contact-form-wrapper" data-aos="fade-up">
+                        <form name="contactForm" ng-submit="vm.submitForm()" novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="name">Full Name *</label>
+                                        <input type="text" class="form-control" id="name" name="name" ng-model="vm.formData.name" required>
+                                        <div class="error-message" ng-if="contactForm.name.$invalid && contactForm.name.$touched">
+                                            Please enter your name.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="email">Email Address *</label>
+                                        <input type="email" class="form-control" id="email" name="email" ng-model="vm.formData.email" required>
+                                        <div class="error-message" ng-if="contactForm.email.$invalid && contactForm.email.$touched">
+                                            Please enter a valid email address.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label for="subject">Subject *</label>
+                                <input type="text" class="form-control" id="subject" name="subject" ng-model="vm.formData.subject" required>
+                                <div class="error-message" ng-if="contactForm.subject.$invalid && contactForm.subject.$touched">
+                                    Please enter a subject.
+                                </div>
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label for="message">Message *</label>
+                                <textarea class="form-control" id="message" name="message" rows="4" ng-model="vm.formData.message" required></textarea>
+                                <div class="error-message" ng-if="contactForm.message.$invalid && contactForm.message.$touched">
+                                    Please enter your message.
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary-gradient btn-block" ng-disabled="contactForm.$invalid" style="color: white !important;">
+                                <i class="fas fa-paper-plane me-2"></i> Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <div class="footer-logo">
+                        <img src="/static/images/RiseUP.png" alt="RiseUP Logo" height="40">
+                    </div>
+                    <p class="footer-description">
+                        RiseUP is an AI-powered career growth platform that helps you create standout resumes, ace interviews, and find the perfect career path.
+                    </p>
+                    <div class="social-links mb-4">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h5 class="footer-heading">Company</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h5 class="footer-heading">Resources</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <h5 class="footer-heading">Subscribe to Our Newsletter</h5>
+                    <p>Stay updated with the latest career tips and insights.</p>
+                    <div class="newsletter-form">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Your email address">
+                            <button class="btn btn-primary-gradient" type="button" style="color: white !important;">Subscribe</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="footer-divider">
+            <div class="row footer-bottom">
+                <div class="col-md-6">
+                    <p class="copyright">
+                        &copy; {{vm.currentYear}} RiseUP. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <button class="btn-scroll-top" ng-click="vm.scrollToTop()">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    {% endverbatim %}
+
+    <!-- JavaScript Libraries -->
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- AOS Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    
+    <!-- AngularJS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="{% static 'js/landingPageApp.js' %}"></script>
+</body>
+</html>

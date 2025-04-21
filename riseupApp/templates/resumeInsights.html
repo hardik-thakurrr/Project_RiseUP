@@ -1,0 +1,203 @@
+{% verbatim %}
+<!-- Custom CSS -->
+<style>
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.15);
+      --glass-border: rgba(255, 255, 255, 0.3);
+      --shadow-color: rgba(0, 0, 0, 0.1);
+      --blur: blur(10px);
+      --border-radius: 20px;
+      --badge-bg: var(--primary);
+      --text-dark: #1f1f1f;
+    }
+  
+    .riseup-card {
+      backdrop-filter: var(--blur);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--border-radius);
+      box-shadow: 0 8px 20px var(--shadow-color);
+      transition: all 0.3s ease-in-out;
+    }
+  
+    .riseup-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+  
+    .section-heading {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  
+    .section-heading::before {
+      content: "✦";
+      font-size: 1.2rem;
+      color: var(--accent);
+    }
+  
+    .riseup-badge {
+      background-color: var(--badge-bg);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: background 0.3s;
+    }
+  
+    .riseup-badge:hover {
+      background-color: var(--primary-dark);
+      color: white;
+    }
+
+    .browse {
+      color: var(--primary);
+    }
+  
+    .card-body {
+      color: var(--text-dark);
+      font-family: 'Segoe UI', sans-serif;
+    }
+    
+    /* Add to your existing CSS */
+    .card-scrollable-content {
+        overflow-y: auto;
+        max-height: 300px;
+    }
+    
+    /* Make the row take full height with a max height constraint */
+    .resume-insights-row {
+        height: 90%;
+        /* max-height: 700px; Set a reasonable maximum */
+    }
+    
+    /* These card containers need fixed height to create scrolling */
+    .card-fixed-height {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Make section headings not scrollable */
+    .section-heading {
+        position: sticky;
+        top: 0;
+        background: inherit;
+        z-index: 1;
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+  
+</style>
+<div class="card-body w-100 h-100 d-flex flex-column gap-2">
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="card-title mb-1">RESUME<span class="browse"> INSIGHTS</span></h2>
+  </div>
+    <!-- Update the row class -->
+<div class="row row-cols-3 g-2 w-100 resume-insights-row">
+  <!-- First column -->
+  <div class="col-md-4 d-flex flex-column gap-2">
+      <!-- Personal Info stays the same -->
+      <div class="card riseup-card" style="background-color: rgba(0, 165, 207, 0.15);">
+          <div class="card-body d-flex flex-column gap-1">
+              <h5 class="card-title">👤 {{ resumeInsights.name }}</h5>
+              <span><i class="bi bi-envelope mx-1"></i> {{ resumeInsights.email || 'N/A' }}</span>
+              <span><i class="bi bi-telephone mx-1"></i> {{ resumeInsights.phone || 'N/A' }}</span>
+          </div>
+      </div>
+      <!-- Skills - Make this scrollable -->
+      <div class="card riseup-card card-fixed-height" style="background-color: rgba(123, 229, 131, 0.15);">
+          <div class="card-body">
+              <h5 class="section-heading">🎯 Skills</h5>
+              <div class="d-flex flex-wrap card-scrollable-content">
+                  <span class="badge riseup-badge me-2 mb-2" ng-repeat="skill in resumeInsights.skills">
+                      {{ skill }}
+                  </span>
+              </div>
+          </div>
+      </div>
+  </div>
+  
+  <!-- Second column -->
+  <div class="col-md-4 d-flex flex-column gap-2">
+      <!-- Education -->
+      <div class="card riseup-card" style="background-color: rgba(79, 70, 229, 0.15);">
+          <div class="card-body">
+              <h5 class="section-heading">🎓 Education</h5>
+              <ul class="list-unstyled card-scrollable-content mb-0">
+                  <li class="mb-2" ng-repeat="edu in resumeInsights.education">
+                      <strong>{{ edu.Degree }}</strong> - {{ edu.Institute }}<br>
+                      <small class="text-muted">{{ edu.Year }} | Score: {{ edu.Score }}</small>
+                  </li>
+              </ul>
+          </div>
+      </div>
+      
+      <!-- Experience - Make this scrollable -->
+      <div class="card riseup-card" style="background-color: rgba(38, 161, 141, 0.15);">
+          <div class="card-body">
+              <h5 class="section-heading">💼 Experience</h5>
+              <div class="card-scrollable-content">
+                  <div ng-repeat="exp in resumeInsights.experience" class="mb-3">
+                      <strong>{{ exp.Role }}</strong> - <span class="text-muted">{{ exp.Company }}</span><br>
+                      <small class="text-muted">{{ exp.StartDate }} to {{ exp.EndDate }}</small>
+                      <p class="white-space-pre mt-1">{{ exp.Description }}</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  
+  <!-- Third column -->
+  <div class="col-md-4 d-flex flex-column gap-2">
+      <!-- Projects - Make this scrollable -->
+      <div class="card riseup-card" style="background-color: rgba(0, 128, 255, 0.15);">
+          <div class="card-body">
+              <h5 class="section-heading">📁 Projects</h5>
+              <div class="card-scrollable-content">
+                  <div ng-repeat="proj in resumeInsights.projects" class="mb-2">
+                      <strong>{{ proj.Name }}</strong> ({{ proj.Year }})<br>
+                      <p class="white-space-pre mb-1">{{ proj.Description }}</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+  
+</div>
+
+<div id="errToast" style="z-index: 999;"
+  class="mb-4 border-danger custom-toast toast position-absolute top-0 start-50 translate-middle-x" role="alert"
+  aria-live="assertive" aria-atomic="true">
+  <div class="toast-header d-flex gap-2">
+    <i class="text-danger fa-solid fa-circle-exclamation fa-beat"></i>
+    <strong class="me-auto">{{errTitle}}</strong>
+    <button type="button" class="ms-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body bg-light rounded-2 border border-top-0">
+    {{errMessage}}
+  </div>
+</div>
+
+<div id="successToast" style="z-index: 999;"
+  class="mb-4 border-success custom-successtoast toast position-absolute top-0 start-50 translate-middle-x" role="alert"
+  aria-live="assertive" aria-atomic="true">
+  <div class="toast-header d-flex gap-2">
+    <i class="text-success fa-solid fa-circle-check fa-beat"></i>
+    <strong class="me-auto">{{errTitle}}</strong>
+    <button type="button" class="ms-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body bg-light rounded-2 border border-top-0">
+    {{errMessage}}
+  </div>
+</div>
+
+{% endverbatim %}

@@ -1,0 +1,159 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" ng-app="authApp">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="{% static 'images/logo.ico' %}"/>
+    <!--<link rel="icon" type="image/x-icon" href="{% static 'images/logo.png' %}"/>-->
+    <title>RiseUP</title>
+    <base href="/" />
+
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="stylesheet" href="{% static 'css/index_style.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spinkit/1.2.5/spinkit.min.css">
+
+  </head>
+  <style>
+
+    body {
+      justify-content: center;
+    }
+
+    .custom-toast {
+    background-color: rgba(255, 0, 0, 0.8); /* Red color with 80% opacity */
+    }
+
+    .custom-successtoast {
+      background-color: rgba(25, 185, 84, 0.8); 
+    }
+    
+    .logo-image {
+        max-height: 100%; /* Control the size of the image */
+        max-width: 100%;
+    }
+
+    .browse {
+      color: #1073af;
+      font-weight: bolder;
+      font-size: 25px;
+    }
+
+  
+  </style>
+ 
+  <body ng-controller="AuthController">
+    <ng-loader settings="{spinkit: 'sk-circle', class:'blue', containerClass: 'loaderContainer'}"></ng-loader>
+
+    <div style="height: 15%;" class="mb-4 d-flex justify-content-center align-items-center">
+        <img src="/static/images/RiseUP.png" class="logo-image" />
+    </div>
+
+
+    <div class="container" id="container">
+      <div class="form-container sign-up-container">
+        <form id="signupForm" name="signupForm" ng-submit="signUp()" method="post" novalidate>
+          {% csrf_token %}
+          <h1>Create Account</h1>
+          <input id="username" ng-model="username" type="text" name="username" placeholder="Name" required ng-class="{'is-invalid': signupForm.$submitted && signupForm.username.$invalid}"/>
+          <div ng-if="(signupForm.$submitted || signupForm.username.$touched) && signupForm.username.$error.required">
+            <small class="text-danger">Username is required.</small>
+          </div>
+          <input id="email" ng-model="email" type="email" name="email" placeholder="Email" ng-required="true" ng-pattern="/^[\w\.-]+@[\w\.-]+\.\w+$/" ng-class="{'is-invalid': (isEmailFocused || signupForm.email.$error.required || signupForm.email.$error.pattern) && signupForm.$submitted}"/>
+          <div ng-if="(signupForm.$submitted || signupForm.email.$touched) && signupForm.email.$error">
+            <small class="text-danger" ng-if="signupForm.email.$error.pattern">Enter a valid email Address</small>
+            <small class="text-danger" ng-if="signupForm.email.$error.required">Email Id is required</small>
+          </div>
+          
+          <!-- <input id="password" ng-model="password" type="password" name="password" placeholder="Password" ng-required="true" ng-pattern="/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/" ng-class="{'is-invalid': (signupForm.password.$touched || signupForm.$submitted) && signupForm.password.$invalid}"/> -->
+          {% verbatim %}
+          <div class="input-container">
+          <span class="ab"><i class="fa" ng-class="passwordFieldType === 'password' ? 'fa-eye' : 'fa-eye-slash'" ng-click="togglePasswordVisibility()"></i></span>
+          <input type="{{passwordFieldType}}" id="password" name="password" placeholder="Enter password"  ng-required="true" ng-model="password" ng-pattern="/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/" ng-class="{'is-invalid': signupForm.$submitted && signupForm.password.$invalid}">
+          </div>
+          <div ng-if="(signupForm.$submitted || signupForm.password.$touched) && signupForm.password.$error">
+            <small class="text-danger" ng-if="signupForm.password.$error.pattern">Password should be atleast 8 characters long and should contain both letters and special character</small>
+            <small class="text-danger" ng-if="signupForm.password.$error.required">Password is required</small>
+          </div>
+          {% endverbatim %}
+          <button id="signupsubmit" type="submit">Sign Up</button>
+        </form>
+      </div>
+      <div class="form-container sign-in-container">
+        <form id="signinForm" name="signinForm" ng-submit="signIn()" method="post" novalidate>
+          {% csrf_token %}
+          <h1>Sign in</h1>
+          <input id="emailsignin" ng-model="emailsignin" type="email" name="emailsignin" placeholder="Email" ng-required="true" ng-pattern="/^[\w\.-]+@[\w\.-]+\.\w+$/" ng-class="{'is-invalid': (isEmailFocused || signinForm.emailsignin.$error.required || signinForm.emailsignin.$error.pattern) && signinForm.$submitted}"/>
+          <div ng-if="(signinForm.$submitted || signinForm.emailsignin.$touched) && signinForm.$invalid">
+            <small class="text-danger" ng-if="signinForm.emailsignin.$error.pattern">Enter a valid email Address</small>
+            <small class="text-danger" ng-if="signinForm.emailsignin.$error.required">Email Id is required</small>
+          </div>
+          {% verbatim %} 
+          <div class="input-container">
+          
+          <span class="ab"><i style="cursor: pointer" class="fa" ng-class="passwordFieldType === 'password' ? 'fa-eye-slash' : 'fa-eye'" ng-click="togglePasswordVisibility()"></i></span>
+          <input type="{{passwordFieldType}}" id="passwordsignin" name="passwordsignin" placeholder="Enter password" ng-required="true" ng-model="passwordsignin" ng-class="{'is-invalid': (isPasswordFocussed || signinForm.passwordsignin.$error.required) && signinForm.$submitted}">
+          </div>
+          <small class="text-danger" ng-show="(signinForm.$submitted || signinForm.passwordsignin.$touched) && signinForm.passwordsignin.$error.required">Password is required</small>
+          {% endverbatim %}
+          <a href="#">Forgot your password?</a>
+          <button id="signinbutton" type="submit">Sign In</button>
+        </form>
+      </div>
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <h1>Welcome Back!</h1>
+            <p>
+              To keep connected with us please login with your personal info
+            </p>
+            <button class="ghost" id="signIn">Sign In</button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h1>Hello, Friend!</h1>
+            <p>Enter your personal details and start journey with us</p>
+            <button class="ghost" id="signUp">Sign Up</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% verbatim %} 
+        <div id="errToast" style="z-index: 999;" class="mb-4 border-danger custom-toast toast position-absolute bottom-0 start-50 translate-middle-x" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header d-flex gap-2">
+            <i class="text-danger fa-solid fa-circle-exclamation fa-beat"></i>
+            <strong class="me-auto">{{errTitle}}</strong>
+            <button type="button" class="ms-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body bg-light rounded-2 border border-top-0">
+            {{errMessage}}
+          </div>
+        </div>
+    {% endverbatim %}
+
+    {% verbatim %} 
+        <div id="successToast" style="z-index: 999;" class="mb-4 border-success custom-successtoast toast position-absolute bottom-0 start-50 translate-middle-x" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header d-flex gap-2">
+            <i class="text-success fa-solid fa-circle-check fa-beat"></i>
+            <strong class="me-auto">{{errTitle}}</strong>
+            <button type="button" class="ms-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body bg-light rounded-2 border border-top-0">
+            {{errMessage}}
+          </div>
+        </div>
+    {% endverbatim %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="http://unpkg.com/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'js/authApp.js' %}"></script>
+    <script src="{% static 'js/index_script.js' %}"></script>
+    <script src="{% static 'js/spinkit-loader.min.js' %} "></script>
+  </body>
+</html>

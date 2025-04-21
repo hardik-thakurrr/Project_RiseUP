@@ -1,0 +1,290 @@
+{% verbatim %}
+<!-- Custom CSS -->
+<style>
+  .recommendation-card {
+    width: 100%;
+    background: linear-gradient(135deg, #e0f7fa 0%, #f1fdfb 100%);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 150, 136, 0.2);
+    padding: 40px 30px;
+    transition: all 0.3s ease;
+  }
+
+  .recommendation-card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 12px 35px rgba(0, 150, 136, 0.3);
+  }
+
+  .form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .input-group label {
+    font-weight: 600;
+    font-size: 16px;
+    color: #00695c;
+    margin-bottom: 8px;
+  }
+
+  .input-group input {
+    padding: 12px 16px;
+    font-size: 15px;
+    border-radius: 14px !important;
+    ;
+    border: 1.5px solid #b2dfdb;
+    background-color: #ffffff;
+    transition: 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  .input-group select {
+    padding: 12px 16px;
+    padding-right: 38px;
+    /* ⬅ Extra space on the right for the arrow */
+    font-size: 15px;
+    border-radius: 14px !important;
+    border: 1.5px solid #b2dfdb;
+    background-color: #ffffff;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='20,50 70,100 120,50' stroke='%23009688' stroke-width='15' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    /* ⬅ Position arrow further left */
+    background-size: 14px;
+  }
+
+  .input-group input:focus,
+  .input-group select:focus {
+    border-color: #26c6da;
+    background-color: #e0f2f1;
+    outline: none;
+  }
+
+  .submit-btn {
+    background: linear-gradient(to right, #26c6da, #009688);
+    color: #fff;
+    padding: 14px;
+    font-size: 17px;
+    font-weight: bold;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+
+  .submit-btn:hover {
+    background: linear-gradient(to right, #00796b, #00695c);
+    transform: scale(1.02);
+  }
+
+  @media (max-width: 768px) {
+    .recommendation-card {
+      padding: 25px 20px;
+    }
+
+    .submit-btn {
+      font-size: 16px;
+    }
+  }
+
+  .courses-container {
+    max-height: 500px;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 10px;
+    border-radius: 12px;
+    background: #f9f9f9;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+  }
+
+  .course-card {
+    width: 260px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 150, 136, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 150, 136, 0.15);
+  }
+
+  .course-img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+  }
+
+  .course-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .course-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #004d40;
+    min-height: 48px;
+  }
+
+  .course-difficulty {
+    font-size: 16px;
+    color: #00796b;
+  }
+
+  .course-link {
+    margin-top: auto;
+    align-self: flex-start;
+    font-size: 14px;
+    color: #26a69a;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .course-link:hover {
+    text-decoration: underline;
+  }
+
+  /* Scrollbar styling */
+  .courses-container::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .courses-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 8px;
+  }
+
+  .courses-container::-webkit-scrollbar-thumb {
+    background: #80cbc4;
+    border-radius: 8px;
+  }
+
+  .courses-container::-webkit-scrollbar-thumb:hover {
+    background: #4db6ac;
+  }
+
+  @media (max-width: 768px) {
+    .course-card {
+      width: 100%;
+    }
+  }
+
+  .view-btn {
+  background: linear-gradient(to right, #009688, #26c6da);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 10px 16px;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.view-btn:hover {
+  background: linear-gradient(to right, #00796b, #004d40);
+  transform: translateY(-2px);
+  color: #fff;
+}
+</style>
+
+<div class="card-body w-100 h-100 d-flex flex-column gap-2">
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="card-title mb-1">COURSE <span class="browse">RECOMMENDATIONS</span></h2>
+  </div>
+
+  <div class="row row-cols-2 align-items-center g-4 h-100" ng-if="showForm">
+
+    <div class="col-6 d-flex flex-column justify-content-center align-items-center">
+      <div class="recommendation-card">
+        <form class="form-section" ng-submit="getRecommendations()">
+
+          <div class="input-group">
+            <label style="font-size: large;" for="interest">💡 Area of Interest</label>
+            <input style="font-size: medium;" type="text" name="topic" ng-model="courseInput.topic" id="interest"
+              placeholder="eg. Machine Learning, Cybersecurity, UI/UX" />
+          </div>
+
+          <div class="input-group">
+            <label style="font-size: large;" for="level">📘 Proficiency Level</label>
+            <select style="font-size: large;" name="level" id="level" ng-model="courseInput.level">
+              <option style="font-size: large;" value="" disabled selected>Select your Level</option>
+              <option value="Beginner">Beginner</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Advanced">Advanced</option>
+            </select>
+          </div>
+
+          <button style="font-size: large;" class="submit-btn">🔍 Get Recommendations</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-6 image-container d-md-block">
+      <img src="/static/images/Course.webp" style="width: 100%; " />
+    </div>
+
+  </div>
+
+  <!-- Place this div below the form where showForm is false -->
+  <div ng-if="!showForm">
+    <div class="courses-container">
+      <div class="course-card" ng-repeat="course in courses">
+        <img class="course-img" ng-src="{{course.course_image}}" alt="Course Image">
+        <div class="course-content flex-fill">
+          <div class="course-name">{{course.course_name}}</div>
+          <div class="course-difficulty">{{course.difficulty}}</div>
+          <a style="font-weight: bold;" class="mt-auto btn btn-outline-primary mt-auto align-self-center" ng-href="{{course.course_link}}" target="_blank">
+            🌐 View Course
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="errToast" style="z-index: 999;"
+  class="mb-4 border-danger custom-toast toast position-absolute top-0 start-50 translate-middle-x" role="alert"
+  aria-live="assertive" aria-atomic="true">
+  <div class="toast-header d-flex gap-2">
+    <i class="text-danger fa-solid fa-circle-exclamation fa-beat"></i>
+    <strong class="me-auto">{{errTitle}}</strong>
+    <button type="button" class="ms-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body bg-light rounded-2 border border-top-0">
+    {{errMessage}}
+  </div>
+</div>
+
+<div id="successToast" style="z-index: 999;"
+  class="mb-4 border-success custom-successtoast toast position-absolute top-0 start-50 translate-middle-x" role="alert"
+  aria-live="assertive" aria-atomic="true">
+  <div class="toast-header d-flex gap-2">
+    <i class="text-success fa-solid fa-circle-check fa-beat"></i>
+    <strong class="me-auto">{{errTitle}}</strong>
+    <button type="button" class="ms-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body bg-light rounded-2 border border-top-0">
+    {{errMessage}}
+  </div>
+</div>
+
+{% endverbatim %}

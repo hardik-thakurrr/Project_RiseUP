@@ -1,0 +1,239 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+/*---------------------------------
+# General Styles
+----------------------------------*/
+:root {
+  /* RiseUP color palette based on logo */
+  --primary-dark: #004E64;
+  --primary: #00A5CF;
+  --primary-light: #50D3CD;
+  --accent: #4f46e5;
+  --secondary-light: #7BE583;
+  --secondary: #50C388;
+  --secondary-dark: #26a18d;
+  --text-dark: #333333;
+  --text-light: #6c757d;
+  --white: #ffffff;
+  --light-bg: #f8f9fa;
+  --border-color: #e9ecef;
+  --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  font-family: 'system-ui', 'Open Sans', sans-serif;
+  color: var(--text-dark);
+  line-height: 1.6;
+  overflow-x: hidden;
+  background-color: var(--white);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'system-ui', 'Montserrat', sans-serif;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+
+.file-upload-box {
+  position: relative;
+  background-color: aliceblue;
+  border-radius: 10px;
+  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='10' ry='10' stroke='%2387b9d7' stroke-width='4' stroke-dasharray='17%2c15' stroke-dashoffset='21' stroke-linecap='round'/%3e%3c/svg%3e");
+  z-index: 1;
+  font-size: larger;
+}
+
+#fileLabel.dragover {
+  background-color: #bbdefb;
+  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='10' ry='10' stroke='%231073af' stroke-width='4' stroke-dasharray='17%2c15' stroke-dashoffset='21' stroke-linecap='round'/%3e%3c/svg%3e");
+}
+
+.file-upload-box .content {
+  position: relative;
+  z-index: 2; /* Ensure content is above the background */
+}
+
+.browse {
+  color: #1073af;
+  font-weight: bolder;
+}
+
+.file-list {
+  text-align: left;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #e3f2fd;
+  border: 1px solid #bbdefb;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  font-size: large;
+  color: #1e88e5;
+}
+
+.file-item.currentFile {
+  font-weight: bold;
+  background-color: #9dd6ff;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+}
+
+.file-info img {
+  height: 50px;
+  margin-right: 10px;
+}
+
+.status {
+  color: #4caf50;
+  font-weight: bold;
+  margin-right: 1rem;
+}
+
+.file-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1%;
+}
+
+#object-container {
+  border: 2px solid #ccc;
+  overflow: auto; /* Enable scrolling if necessary */
+  position: relative;
+}
+
+#viewer-window {
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scrolling if necessary */
+}
+
+#output {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  position: relative;
+}
+
+#image-controls {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 3%;
+  left: 3%;
+  gap: 10px;
+}
+
+.zoom-btn {
+  background-color: rgba(128, 128, 128, 0.6);
+  color: white;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+  border: none;
+  color: white;
+  border: none;
+}
+
+img#output {
+  object-fit: contain;
+  background-color: aliceblue;
+}
+
+.navbar-brand img {
+  margin-right: 10px;
+}
+
+.loaderContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999; /* ensure it's on top of other elements */
+  display: flex; /* optional, for centering the loader */
+  justify-content: center; /* optional, for centering the loader */
+  align-items: center; /* optional, for centering the loader */
+  width: 100%;
+  height: 100vh;
+  background-color: white;
+}
+
+.blue::before {
+  background-color: var(--primary) !important;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.list-group-item {
+  padding-left: 0;
+  padding-right: 0;
+}
+a.nav-link {
+  color: var(--primary-dark);
+  text-decoration: none;
+}
+
+.hover-card {
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card:hover {
+  box-shadow: 6px 10px 0px -2px rgba(155,155,155,1);
+}
+
+.btn-grad {
+  background-image: linear-gradient(to right, #00c6ff 0%, #0072ff  51%, #00c6ff  100%); 
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;            
+  box-shadow: 0 0 20px #eee;
+}
+
+.btn-grad:hover {
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav-link.active {
+  background-color: var(--primary-dark) !important;
+}

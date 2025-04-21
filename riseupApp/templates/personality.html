@@ -1,0 +1,449 @@
+{% verbatim %}
+<!-- Custom CSS -->
+<style>
+  .container {
+    padding: 0 15px;
+    /* 🆕 add a little side padding on smaller screens */
+  }
+
+  .question-card {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 24px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
+    transition: all 0.4s ease-in-out;
+    width: 100%;
+    max-width: 700px;
+    padding: 50px 40px;
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+  }
+
+  .question-card h4 {
+    font-size: 26px;
+  }
+
+  .question-card p {
+    font-size: 16px;
+  }
+
+  .rating-buttons {
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .rating-circle {
+    width: 60px;
+    height: 60px;
+    font-weight: 600;
+    font-size: 19px;
+    background-color: #f9f9f9;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+  }
+
+  .rating-circle:hover {
+    background-color: var(--primary);
+    color: #fff;
+    transform: scale(1.12);
+  }
+
+  .rating-circle.selected {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 0 10px rgba(13, 110, 253, 0.3);
+    transform: scale(1.1);
+  }
+
+  .emoji-labels {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    text-align: center;
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto 25px auto;
+  }
+
+  .emoji-labels span {
+    font-size: 26px;
+  }
+
+  .progress {
+    height: 14px;
+    border-radius: 50px;
+    background: #e0e0e0;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+
+  .progress-bar {
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+    transition: width 0.5s ease-in-out;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .btn {
+    border-radius: 12px;
+    padding: 10px 22px;
+    font-size: 17px;
+  }
+
+  @media (max-width: 768px) {
+    .question-card {
+      padding: 35px 25px;
+    }
+
+    .rating-circle {
+      width: 50px;
+      height: 50px;
+      font-size: 17px;
+    }
+
+    .emoji-labels span {
+      font-size: 20px;
+    }
+
+    .btn {
+      font-size: 15px;
+      padding: 8px 18px;
+    }
+
+    .question-card h4 {
+      font-size: 22px;
+    }
+
+    .question-card p {
+      font-size: 14px;
+    }
+  }
+
+  /* Insight Card Styling */
+  .insight-card {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .insight-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Trait title */
+  .trait-title {
+    font-size: 1.1rem;
+    color: #555;
+  }
+
+  /* Trait value */
+  .trait-value {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #333;
+  }
+
+  /* Improve spacing and layout */
+  h3,
+  h5 {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .text-primary {
+    color: var(--primary);
+  }
+
+  .text-muted {
+    color: #777;
+  }
+
+  .text-dark {
+    color: #212529;
+  }
+
+  .animated-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: transparent;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    background-clip: text;
+    position: relative;
+    display: inline-block;
+    animation: stompIn 0.6s ease forwards;
+    transform-origin: center;
+    opacity: 0;
+  }
+  
+  /* Underline Animation: expand from center + fade to sides */
+  .animated-title::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    height: 3px;
+    width: 0;
+    background: linear-gradient(to right, transparent 0%, var(--primary) 50%, transparent 100%);
+    transform: translateX(-50%);
+    animation: underlineExpandFade 1.2s ease forwards;
+  }
+  
+  /* Text stomp-in effect */
+  @keyframes stompIn {
+    0% {
+      transform: scale(1.5);
+      opacity: 0.3;
+    }
+    60% {
+      transform: scale(1.3);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  /* Underline grow then fade toward sides */
+  @keyframes underlineExpandFade {
+    0% {
+      width: 0;
+      opacity: 1;
+    }
+    50% {
+      width: 100%;
+      opacity: 1;
+    }
+    100% {
+      width: 100%;
+      opacity: 0;
+    }
+  } 
+  
+  :root {
+    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --blur: blur(10px);
+    --border-radius: 20px;
+    --badge-bg: var(--primary);
+    --text-dark: #1f1f1f;
+  }
+
+  .riseup-card {
+    backdrop-filter: var(--blur);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 20px var(--shadow-color);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .riseup-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .section-heading {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--primary-dark);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-heading::before {
+    content: "✦";
+    font-size: 1.2rem;
+    color: var(--accent);
+  }
+  
+</style>
+
+
+
+<div class="card-body w-100 h-100 d-flex flex-column gap-2">
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="card-title mb-1">PERSONALITY <span class="browse">INSIGHTS</span></h2>
+  </div>
+
+
+  <div class="row row-cols-2 align-items-center g-2 h-100" ng-if="!personalityInsights">
+
+    <div class="col-7 d-flex flex-column justify-content-center align-items-center" ng-if="showForm">
+      <div class="question-card p-4 shadow rounded w-100" style="max-width: 600px;">
+        <div class="fade-slide" ng-if="currentTrait">
+          <h4 class="fw-semibold mb-2 text-center">"{{ traitTitles[currentTrait] }}"</h4>
+          <p class="text-muted text-center mb-4">{{ traitDescriptions[currentTrait] }}</p>
+
+          <!-- Rating scale -->
+          <div class="rating-buttons d-flex justify-content-center flex-wrap mb-2">
+            <label ng-repeat="i in [].constructor(5) track by $index" class="rating-circle"
+              ng-class="{ 'selected': userInput[currentTrait] === $index + 1 }">
+              <input type="radio" ng-model="userInput[currentTrait]" ng-value="$index + 1" class="d-none">
+              <span>{{ $index + 1 }}</span>
+            </label>
+          </div>
+
+          <!-- Emoji labels -->
+          <div class="d-flex justify-content-between w-75 mx-auto mb-4 emoji-labels">
+            <span>😞</span>
+            <span>😐</span>
+            <span>😊</span>
+            <span>😃</span>
+            <span>🤩</span>
+          </div>
+
+          <!-- Navigation Buttons -->
+          <div class="text-center d-flex justify-content-between w-100">
+            <button class="btn btn-outline-secondary" ng-click="prevTrait()" ng-disabled="currentIndex === 0">
+              ⬅ Back
+            </button>
+
+            <button class="btn btn-primary px-4" ng-click="nextTrait()" ng-disabled="!userInput[currentTrait]">
+              {{ isLastTrait() ? 'Submit' : 'Next ➡' }}
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+
+
+      <!-- Progress Bar -->
+      <div class="progress w-100 mt-4" style="max-width: 600px;">
+        <div class="progress-bar bg-primary" role="progressbar" ng-style="{'width': progressPercentage() + '%'};"
+          aria-valuemin="0" aria-valuemax="100">
+        </div>
+      </div>
+    </div>
+
+    <div class="col-5 image-container d-none d-md-block">
+      <img src="/static/images/Personality.avif" alt="Personality Visual" style="width: 100%; " />
+    </div>
+
+  </div>
+
+
+  <div class="row row-cols-2 g-3 w-100 justify-content-center h-100 overflow-hidden" ng-if="personalityInsights">
+    <!-- Left Column -->
+    <div class="col-md-7 d-flex flex-column gap-3 h-100 overflow-hiddden mt-0 py-2">
+      <!-- Personality Type -->
+      <div class="card riseup-card text-center" style="background-color: rgba(0, 165, 207, 0.15);">
+        <div class="card-body">
+          <h5 class="card-title animated-title mb-2">{{ personalityInsights.personalityType }}</h5>
+          <p class="text-muted" style="text-align: justify;">{{ personalityInsights.explanation }}</p>
+        </div>
+      </div>
+
+      <!-- Reasoning -->
+      <div class="card riseup-card h-100 overflow-hidden" style="background-color: rgba(222, 213, 252, 0.4);">
+        <div class="card-body mh-100 d-flex flex-column">
+          <h5 class="section-heading">🧠 Reasoning</h5>
+          <p class="text-muted overflow-auto">{{ personalityInsights.reasoning }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Right Column -->
+    <div class="col-md-5 d-flex flex-column gap-3 h-100 overflow-auto mt-0 py-2">
+
+      <!-- Strengths -->
+      <div class="card riseup-card" style="background-color: rgba(209, 250, 229, 0.4);">
+        <div class="card-body">
+          <h5 class="section-heading">💪 Strengths</h5>
+          <ul class="list-unstyled ps-4">
+            <li class="d-flex align-items-center" ng-repeat="s in personalityInsights.strengths">
+              <i class="fa-solid fa-check-circle me-2 text-success"></i> {{ s }}
+            </li>
+          </ul>
+        </div>
+      </div>
+  
+      <!-- Weaknesses -->
+      <div class="card riseup-card" style="background-color: rgba(255, 214, 214, 0.4);">
+        <div class="card-body">
+          <h5 class="section-heading">⚠️ Weaknesses</h5>
+          <ul class="list-unstyled ps-4">
+            <li class="d-flex align-items-center" ng-repeat="w in personalityInsights.weaknesses">
+              <i class="fa-solid fa-circle-exclamation me-2 text-danger"></i> {{ w }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Areas of Improvement -->
+      <div class="card riseup-card" style="background-color: rgba(255, 249, 196, 0.4);">
+        <div class="card-body">
+          <h5 class="section-heading">📈 Areas of Improvement</h5>
+          <ul class="list-unstyled ps-4">
+            <li class="d-flex align-items-center" ng-repeat="a in personalityInsights.areasOfImprovement">
+              <i class="fa-solid fa-arrow-up-right-dots me-2 text-warning"></i> {{ a }}
+            </li>
+          </ul>
+        </div>
+      </div>
+  
+      <!-- Suggestions -->
+      <div class="card riseup-card" style="background-color: rgba(204, 228, 255, 0.4);">
+        <div class="card-body">
+          <h5 class="section-heading">💡 Suggestions</h5>
+          <ul class="list-unstyled ps-4">
+            <li class="d-flex align-items-center" ng-repeat="sug in personalityInsights.suggestions">
+              <i class="fa-solid fa-lightbulb me-2 text-primary"></i> {{ sug }}
+            </li>
+          </ul>
+        </div>
+      </div>
+  
+      <!-- Preferred Work Environment -->
+      <div class="card riseup-card" style="background-color: rgba(255, 229, 204, 0.4);">
+        <div class="card-body">
+          <h5 class="section-heading">🏢 Work Environment</h5>
+          <p class="ms-2 mb-0 d-flex align-items-start">
+            {{ personalityInsights.preferrableWorkEnvironment }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+</div>
+
+
+<div id="errToast" style="z-index: 999;"
+  class="mb-4 border-danger custom-toast toast position-absolute top-0 start-50 translate-middle-x" role="alert"
+  aria-live="assertive" aria-atomic="true">
+  <div class="toast-header d-flex gap-2">
+    <i class="text-danger fa-solid fa-circle-exclamation fa-beat"></i>
+    <strong class="me-auto">{{errTitle}}</strong>
+    <button type="button" class="ms-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body bg-light rounded-2 border border-top-0">
+    {{errMessage}}
+  </div>
+</div>
+
+<div id="successToast" style="z-index: 999;"
+  class="mb-4 border-success custom-successtoast toast position-absolute top-0 start-50 translate-middle-x" role="alert"
+  aria-live="assertive" aria-atomic="true">
+  <div class="toast-header d-flex gap-2">
+    <i class="text-success fa-solid fa-circle-check fa-beat"></i>
+    <strong class="me-auto">{{errTitle}}</strong>
+    <button type="button" class="ms-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body bg-light rounded-2 border border-top-0">
+    {{errMessage}}
+  </div>
+</div>
+
+{% endverbatim %}
